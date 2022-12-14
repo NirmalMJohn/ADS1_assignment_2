@@ -70,11 +70,12 @@ def topfivepop(df):
 def stati_corr(df):
     '''
     This function is defined to plot the Correlation heat map with certain
-    desired indicators of Country USA, Hence the Original Data is passed from
-    main program as an arguement. Further the Data is manipulated process
-    using pandas function to obatain data with desired indicator,latter
-    is through passed corr() for pair wise correlation and mapped to heatmap
-    using using sb.heatmap(). The Heat Map is plotted within this function.
+    desired indicators of Country United States & China, Hence the Original
+    Data is passed from main program as an arguement. Further the Data is
+    manipulated process using pandas function to obatain data with desired
+    indicator,latter is through passed corr() for pair wise correlation and
+    mapped to heatmap using using sb.heatmap(). The Heat Map is plotted within
+    this function.
 
     Parameters
     ----------
