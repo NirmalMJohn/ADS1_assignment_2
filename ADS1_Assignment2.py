@@ -4,15 +4,16 @@ import matplotlib.pyplot as plt
 import seaborn as sb
 from scipy.stats import skew
 
+
 def reader(file):
     '''
-    It is defined to pass on the file name of the data frame, then later read 
+    It is defined to pass on the file name of the data frame, then later read
     the data frame and transpose it. Later the Original data frame & transposed
     data frame is returned
     Parameters
     ----------
-    file : It holds the name of World Bank Data set which needs to be transposed 
-    further operations are being carried out.
+    file :It holds the name of World Bank Data set which needs to be
+    transposed further operations are being carried out.
 
     Returns
     -------
@@ -87,7 +88,6 @@ def stati_corr(df):
     # Storing  the Values of indicators for Country USA to new data frame.
     us_df = df.groupby(['Country Name']).get_group('United States')
     us_df = us_df.reset_index().drop(['index'], axis=1)
-    print(us_df)
     # Alloting only keywords of desired indicator to an empty array Value
     value = ['SP.POP.TOTL', 'EN.ATM.CO2E.LF.KT', 'EG.USE.PCAP.KG.OE',
              'EG.FEC.RNEW.ZS', 'EG.ELC.NGAS.ZS', 'SP.POP.TOTL',
@@ -101,8 +101,6 @@ def stati_corr(df):
     us_id = us_id.set_index('Indicator Name').T.reset_index()
     us_id = us_id.rename_axis(None, axis=1)
     us_id.to_csv('USind.csv')
-    print(us_id)
-    print(us_id.isna().sum())
     us_id = us_id.fillna(us_id.mean())
     print(us_id.isna().sum())
     us_id = us_id.drop(columns=['index'], axis=1)
@@ -114,7 +112,6 @@ def stati_corr(df):
     # Storing  the Values of indicators for Country China to new data frame.
     ch_df = df.groupby(['Country Name']).get_group('China')
     ch_df = ch_df.reset_index().drop(['index'], axis=1)
-    print(ch_df)
     # Alloting only keywords of desired indicator to an empty array Value
     value = ['SP.POP.TOTL', 'EN.ATM.CO2E.LF.KT', 'EG.USE.PCAP.KG.OE',
              'EG.FEC.RNEW.ZS', 'EG.ELC.NGAS.ZS', 'SP.POP.TOTL',
@@ -128,8 +125,6 @@ def stati_corr(df):
     ch_id = ch_id.set_index('Indicator Name').T.reset_index()
     ch_id = ch_id.rename_axis(None, axis=1)
     ch_id.to_csv('Chind.csv')
-    print(ch_id)
-    print(ch_id.isna().sum())
     ch_id = ch_id.fillna(ch_id.mean())
     print(ch_id.isna().sum())
     ch_id = ch_id.drop(columns=['index'], axis=1)
@@ -137,7 +132,6 @@ def stati_corr(df):
     sb.heatmap(ch_id.corr(), annot=True)
     plt.title('Correlation Heatmap  for China')
     plt.show()
-   
     return None
 
 
@@ -146,17 +140,14 @@ df, dft = reader('Whole_Data.xlsx')   # The Original Data & Transposed data
 
 # Original Data is passed to topfivepop() find the Top five populated Countries
 tfp = topfivepop(df)  # Returned Dataframe contains Top 5 Populated Countries
-print(tfp)
+
 # Storing Country name for future filtering of Data
 country_names = tfp['Country Name'].values.tolist()
-print(country_names)
 # Setting the Values in Table Country name as attributes
 tfp = tfp.set_index('Country Name').T.reset_index()
 tfp = tfp.rename_axis(None, axis=1)
 tfp.rename(columns={'index': 'Year'}, inplace=True)
 print(tfp.columns.values)
-tfp.to_csv('tfp.csv')
-print(tfp)
 
 # Plot the Bar Graph of Top 5 countries for an interval of 10 years from 1980
 years = []
@@ -218,8 +209,8 @@ Carbon_TD.plot(kind='line', x='Year', y='Indonesia', ax=ax)
 Carbon_TD.plot(kind='line', x='Year',
                y='Least developed countries: UN classification', ax=ax)
 Carbon_TD.plot(kind='line', x='Year', y='United States', ax=ax)
-#Carbon_TD.plot(kind='line', x='Year', y='Japan', ax=ax)
-#Carbon_TD.plot(kind='line', x='Year', y='Germany', ax=ax)
+Carbon_TD.plot(kind='line', x='Year', y='Japan', ax=ax)
+Carbon_TD.plot(kind='line', x='Year', y='Germany', ax=ax)
 plt.legend(bbox_to_anchor=(1, 1), loc=2, borderaxespad=0.)
 plt.ylabel('CO2 Emission Kt')
 plt.title('CO2 Emmision from Liquid Fuel from 1990-2015')
@@ -264,18 +255,6 @@ plt.tick_params(axis='x', which='both', bottom=False, labelbottom=False)
 plt.savefig('Bar2.png', dpi=300)
 plt.show()
 
-# Histogram of CO2 emission of USA
-plt.figure(dpi=144)
-Carbon_T.hist(column='United States')
-plt.suptitle("Distribution of CO2 Emission for")
-plt.savefig('hist.png', dpi=300)
-plt.xlabel('The Distribution is -vely skewed by -1.083')
-plt.show
-
-# Skewness for the Given Distribution
-us_skew=Carbon_T['United States']
-us_skew=us_skew.dropna()
-print('The Skewness of the Distribution is', skew(us_skew))
 
 # Pie plot  USA vs Rest of World when US Marked its highest emission
 
@@ -305,6 +284,20 @@ ax = Carbon.groupby(['Country Name']).sum().plot(kind='pie', y=1978,
 ax.legend(bbox_to_anchor=(1, 1), loc=2)
 plt.savefig('Pie.png', dpi=300)
 plt.show()
+
+# Skewness for the Given Distribution
+us_skew = Carbon_T['United States']
+us_skew = us_skew.dropna()
+print('The Skewness of the Distribution is', skew(us_skew))
+
+
+# Histogram of CO2 emission of USA
+plt.figure(dpi=144)
+Carbon_T.hist(column='United States')
+plt.suptitle("Distribution of CO2 Emission for")
+plt.savefig('hist.png', dpi=300)
+plt.xlabel('The Distribution is -vely skewed by -1.083')
+plt.show
 
 # Function call for plotting  Correlation Heatmap of USA & China's Indicators
 stati_corr(df)
